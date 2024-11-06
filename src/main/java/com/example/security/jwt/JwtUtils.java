@@ -14,8 +14,8 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 
-@Component
 @Slf4j
+@Component
 public class JwtUtils {
 
 	@Value("${jwt.secret.key}")
