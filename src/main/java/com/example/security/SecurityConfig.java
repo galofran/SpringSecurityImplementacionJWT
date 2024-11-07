@@ -14,8 +14,10 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.security.filters.JwtAuthenticationFilter;
+import com.example.security.filters.JwtAuthorizationFilter;
 import com.example.security.jwt.JwtUtils;
 import com.example.service.UserDetailsServiceImpl;
 
@@ -27,6 +29,9 @@ public class SecurityConfig {
 	
 	@Autowired
 	UserDetailsServiceImpl userDetailsService;
+	
+	@Autowired
+	JwtAuthorizationFilter jwtAuthorizationFilter;
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, AuthenticationManager authenticationManager) throws Exception { //Configuración del acceso a los endpoints, manejo de la sesión con una autenticación básica hecha con un usuario en memoria
@@ -44,8 +49,13 @@ public class SecurityConfig {
 				.sessionManagement(session -> {
 					session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 					})
-				.addFilter(jwtAuthenticationFilter)
+				.addFilter(jwtAuthenticationFilter) 
+				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 				.build();		
+		
+		//Lo primero que se validará es el token
+		//Si el token es inválido entonces se validará la autorización 
+		//Si el usuario no tiene credenciales correctas se denegará el acceso
 	}
 	
 	/*@Bean
