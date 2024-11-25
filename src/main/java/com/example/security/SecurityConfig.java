@@ -21,7 +21,7 @@ import com.example.security.filters.JwtAuthorizationFilter;
 import com.example.security.jwt.JwtUtils;
 import com.example.service.UserDetailsServiceImpl;
 
-@Configuration
+ @Configuration
 public class SecurityConfig {
 	
 	@Autowired
@@ -31,7 +31,7 @@ public class SecurityConfig {
 	UserDetailsServiceImpl userDetailsService;
 	
 	@Autowired
-	JwtAuthorizationFilter jwtAuthorizationFilter;
+	JwtAuthorizationFilter authorizationFilter;
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, AuthenticationManager authenticationManager) throws Exception { //Configuración del acceso a los endpoints, manejo de la sesión con una autenticación básica hecha con un usuario en memoria
@@ -50,7 +50,7 @@ public class SecurityConfig {
 					session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 					})
 				.addFilter(jwtAuthenticationFilter) 
-				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+				.addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class)
 				.build();		
 		
 		//Lo primero que se validará es el token
