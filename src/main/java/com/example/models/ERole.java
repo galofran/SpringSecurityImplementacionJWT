@@ -2,7 +2,7 @@ package com.example.models;
 
 //Roles que puede tener cada usuario
 public enum ERole {
-    ADMIN,
-    USER,
-    INVITED
+    ROLE_ADMIN,
+    ROLE_USER,
+    ROLE_INVITED
 }
